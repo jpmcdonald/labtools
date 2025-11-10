@@ -1,0 +1,6 @@
+# Jupyter lab environment dependencies
+-r requirements.txt
+
+# Jupyter ecosystem
+# Updated: 2025-09-24 11:17:43
+

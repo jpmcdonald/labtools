@@ -1,0 +1,9 @@
+[
+  {
+    "timestamp": "2025-11-09T19:13:22.623828",
+    "action": "artifact_created",
+    "artifact_path": "/private/var/folders/ww/0ynkz35x6bn8h_zy3dj9h9dm0000gn/T/pytest-of-jpmcdonald/pytest-0/test_run_context_sets_environm0/artifact.txt",
+    "artifact_hash": "ed7002b439e9ac845f22357d822bac1444730fbdb6016d3ec9432297b9ec9f73",
+    "artifact_type": "file"
+  }
+]

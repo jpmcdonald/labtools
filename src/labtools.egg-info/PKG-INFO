@@ -1,0 +1,101 @@
+Metadata-Version: 2.4
+Name: labtools
+Version: 0.1.0
+Summary: Reusable infrastructure and automation utilities for lab project bootstrapping.
+Author: JP McDonald
+License: MIT
+Project-URL: Homepage, https://example.com/labtools
+Project-URL: Repository, https://github.com/your-org/labtools
+Project-URL: Documentation, https://example.com/labtools/docs
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: click>=8.1
+Requires-Dist: jinja2>=3.1
+Requires-Dist: pyyaml>=6.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0; extra == "dev"
+Requires-Dist: pytest-click>=1.0; extra == "dev"
+Requires-Dist: ruff>=0.6; extra == "dev"
+Requires-Dist: mypy>=1.10; extra == "dev"
+Dynamic: license-file
+
+# Labtools
+
+Reusable infrastructure, automation, and documentation tooling distilled from prior lab engagements so future projects can start from a clean, client-agnostic foundation.
+
+## Features
+
+- **Extraction playbooks** – Step-by-step guides and scripts (`docs/extraction/`) for harvesting reusable assets via sparse checkout and history rewriting without exposing proprietary content.
+- **Packaged utilities** – Python package under `src/labtools` exposing a CLI (`labtools`) for generating new lab projects from curated templates.
+- **Infrastructure syncing** – Commands for staging Terraform modules into `templates/infra` from sanitized exports.
+- **Shell helper imports** – CLI support to copy shared Bash utilities into `scripts/lib`.
+- **Documentation templates** – Commands to sync sanitized runbooks, status reports, and onboarding guides.
+- **Core utilities** – Support for importing Python modules from a legacy `src/core`.
+- **Data tooling** – Sync reusable loaders, cleaners, quality checks, and dictionaries.
+- **Report automation** – Bring over report generator components for consistent outputs.
+- **MCP tools** – Stage model control plane utilities for orchestrating lab workflows.
+- **Runtime orchestration** – Sync signal-driven checkpoint, pause/resume, and job control primitives.
+- **Project templates** – Jinja-powered scaffolds under `src/labtools/templates/` for bootstrapping consistent repo structures, scripts, and documentation.
+- **Automation scripts** – `scripts/extraction/*.sh` encapsulate the extraction workflow end-to-end.
+- **Environment tooling** – Root-level `activate.sh` / `deactivate.sh` and `go.py` / `go.sh` wrappers streamline dev environment setup.
+
+## Getting Started
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -e .
+labtools --help
+labtools infra --help
+labtools shell --help
+labtools docs --help
+labtools core --help
+labtools data --help
+labtools reports --help
+labtools mcp --help
+labtools runtime --help
+labtools requirements --help
+```
+
+## Repository Layout
+
+- `docs/` – Operational guides for extraction, filtering, and validation.
+- `scripts/` – Shell scripts that automate sparse checkout and history filtering.
+- `src/labtools/` – Python package containing the CLI and reusable modules.
+- `templates/` – Shared configuration templates copied into new labs.
+- `templates/infra/` – Terraform modules staged via `labtools infra sync`.
+- `scripts/lib/` – Shared shell helpers staged via `labtools shell sync`.
+- `src/labtools/templates/docs/` – Markdown templates synced via `labtools docs sync`.
+- `src/labtools/core_modules/` – Python helpers synced via `labtools core sync`.
+- `src/labtools/data_modules/` – Data loaders/cleaners staged via `labtools data sync`.
+- `src/labtools/reporting/` – Report generator components synced via `labtools reports sync`.
+- `src/labtools/mcp_tools/` – MCP utilities staged via `labtools mcp sync`.
+- `src/labtools/runtime_modules/` – Job orchestration primitives synced via `labtools runtime sync`.
+- `requirements/` – Dependency manifests staged via `labtools requirements sync`.
+- `activate.sh` / `deactivate.sh` / `go.{py,sh}` – Environment and CLI entrypoints.
+- `data/` – Sample datasets and staging areas (see `docs/data/README.md`).
+- Governance controls – diagnostics, testing, and approvals are documented in `docs/governance/controls.md`.
+
+For environment workflow details see `docs/usage/environment.md`.
+
+## Development
+
+1. Install development dependencies: `pip install -e .[dev]` (optional extras to be added).
+2. Run formatter and linters: `ruff check src/`.
+3. Execute unit tests: `pytest`.
+
+## Testing
+
+- Unit tests are marked with `@pytest.mark.unit` and run via `pytest -m unit`.
+- Integration tests (`@pytest.mark.integration`) exercise subprocesses and filesystem interactions.
+- Governance tests (`@pytest.mark.governance`) validate diagnostics bundles and human approvals.
+- Use `tox -e py311-unit` for the fast subset and `tox -e py311-all` for the full suite with coverage (80% minimum).
+- Test matrix and fixtures are documented in `docs/testing/matrix.md`.
+
+## Licensing
+
+See `LICENSE` for details.
+
+

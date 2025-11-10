@@ -1,0 +1,30 @@
+{
+  "run_id": "20251109_191321_test_b3363e76",
+  "diag_level": 3,
+  "ruleset": "default",
+  "env": "test",
+  "start_time": "2025-11-09T19:13:21.450819",
+  "end_time": "2025-11-09T19:13:22.623831",
+  "duration_seconds": 1.173012,
+  "artifacts": [
+    {
+      "path": "/private/var/folders/ww/0ynkz35x6bn8h_zy3dj9h9dm0000gn/T/pytest-of-jpmcdonald/pytest-0/test_run_context_sets_environm0/artifact.txt",
+      "type": "file",
+      "hash": "ed7002b439e9ac845f22357d822bac1444730fbdb6016d3ec9432297b9ec9f73",
+      "size": 7,
+      "created_at": "2025-11-09T19:13:22.623806",
+      "metadata": {}
+    }
+  ],
+  "audit_log": [
+    {
+      "timestamp": "2025-11-09T19:13:22.623828",
+      "action": "artifact_created",
+      "artifact_path": "/private/var/folders/ww/0ynkz35x6bn8h_zy3dj9h9dm0000gn/T/pytest-of-jpmcdonald/pytest-0/test_run_context_sets_environm0/artifact.txt",
+      "artifact_hash": "ed7002b439e9ac845f22357d822bac1444730fbdb6016d3ec9432297b9ec9f73",
+      "artifact_type": "file"
+    }
+  ],
+  "git_sha": "unknown",
+  "dvc_rev": "unknown"
+}

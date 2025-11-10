@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "labtools"
+version = "0.1.0"
+description = "Reusable infrastructure and automation utilities for lab project bootstrapping."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+  { name = "JP McDonald" }
+]
+requires-python = ">=3.11"
+dependencies = [
+  "click>=8.1",
+  "jinja2>=3.1",
+  "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "pytest-click>=1.0",
+  "ruff>=0.6",
+  "mypy>=1.10",
+]
+
+[project.urls]
+Homepage = "https://example.com/labtools"
+Repository = "https://github.com/your-org/labtools"
+Documentation = "https://example.com/labtools/docs"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+labtools = ["templates/**/*"]
+
+[project.scripts]
+labtools = "labtools.cli:main"
+
+
