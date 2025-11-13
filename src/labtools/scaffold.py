@@ -4,12 +4,14 @@ from __future__ import annotations
 
 import dataclasses
 import pathlib
+import shutil
 from typing import Any, Dict, Optional
 
 import jinja2
 import yaml
 
 TEMPLATE_ROOT = pathlib.Path(__file__).resolve().parent / "templates"
+LABTOOLS_ROOT = pathlib.Path(__file__).resolve().parent.parent.parent.parent
 
 
 @dataclasses.dataclass
@@ -73,5 +75,102 @@ def _load_yaml(path: pathlib.Path) -> Dict[str, Any]:
         raise ValueError(f"YAML file '{path}' must contain a mapping at the top level.")
 
     return data
+
+
+def install_all_tools(destination: pathlib.Path) -> None:
+    """Copy all available tools from labtools into the destination lab project.
+    
+    This includes:
+    - Core modules (diagnostics, run_context, execution_enforcer, validation_runner, build_reporter)
+    - Data modules (loaders, cleaners, hash_utils, manifest, duckdb_config, environment_manager)
+    - Runtime modules (job orchestration primitives)
+    - MCP tools (model control plane utilities)
+    - Report generators
+    - Requirements files
+    - Environment scripts (activate.sh, deactivate.sh, go.py, go.sh)
+    - Documentation templates
+    """
+    source_modules = LABTOOLS_ROOT / "src" / "labtools"
+    source_requirements = LABTOOLS_ROOT / "requirements"
+    source_root = LABTOOLS_ROOT
+    
+    # Copy core modules
+    core_source = source_modules / "core_modules"
+    core_dest = destination / "src" / "core_modules"
+    if core_source.exists() and any(core_source.iterdir()):
+        core_dest.parent.mkdir(parents=True, exist_ok=True)
+        if core_dest.exists():
+            shutil.rmtree(core_dest)
+        shutil.copytree(core_source, core_dest, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+    
+    # Copy data modules
+    data_source = source_modules / "data_modules"
+    data_dest = destination / "src" / "data_modules"
+    if data_source.exists() and any(data_source.iterdir()):
+        data_dest.parent.mkdir(parents=True, exist_ok=True)
+        if data_dest.exists():
+            shutil.rmtree(data_dest)
+        shutil.copytree(data_source, data_dest, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+    
+    # Copy runtime modules
+    runtime_source = source_modules / "runtime_modules"
+    runtime_dest = destination / "src" / "runtime_modules"
+    if runtime_source.exists() and any(runtime_source.iterdir()):
+        runtime_dest.parent.mkdir(parents=True, exist_ok=True)
+        if runtime_dest.exists():
+            shutil.rmtree(runtime_dest)
+        shutil.copytree(runtime_source, runtime_dest, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+    
+    # Copy MCP tools
+    mcp_source = source_modules / "mcp_tools"
+    mcp_dest = destination / "src" / "mcp_tools"
+    if mcp_source.exists() and any(mcp_source.iterdir()):
+        mcp_dest.parent.mkdir(parents=True, exist_ok=True)
+        if mcp_dest.exists():
+            shutil.rmtree(mcp_dest)
+        shutil.copytree(mcp_source, mcp_dest, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+    
+    # Copy report generators
+    reporting_source = source_modules / "reporting"
+    reporting_dest = destination / "src" / "reporting"
+    if reporting_source.exists() and any(reporting_source.iterdir()):
+        reporting_dest.parent.mkdir(parents=True, exist_ok=True)
+        if reporting_dest.exists():
+            shutil.rmtree(reporting_dest)
+        shutil.copytree(reporting_source, reporting_dest, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+    
+    # Copy requirements files
+    if source_requirements.exists():
+        req_dest = destination / "requirements"
+        req_dest.mkdir(parents=True, exist_ok=True)
+        for req_file in source_requirements.glob("*.txt"):
+            shutil.copy2(req_file, req_dest / req_file.name)
+    
+    # Copy environment scripts
+    for script in ["activate.sh", "deactivate.sh", "go.py", "go.sh"]:
+        script_path = source_root / script
+        if script_path.exists():
+            shutil.copy2(script_path, destination / script)
+            if script.endswith(".sh"):
+                # Make shell scripts executable
+                (destination / script).chmod(0o755)
+    
+    # Copy documentation templates
+    docs_source = source_modules / "templates" / "docs"
+    if docs_source.exists():
+        docs_dest = destination / "docs" / "templates"
+        docs_dest.mkdir(parents=True, exist_ok=True)
+        for doc_template in docs_source.glob("*.j2"):
+            shutil.copy2(doc_template, docs_dest / doc_template.name)
+    
+    # Create data directory structure
+    for subdir in ["archive", "external", "metadata", "processed", "raw", "scratch"]:
+        (destination / "data" / subdir).mkdir(parents=True, exist_ok=True)
+    
+    # Copy data/raw README if it exists
+    data_readme = source_root / "data" / "external" / "README.md"
+    if data_readme.exists():
+        (destination / "data" / "external" / "README.md").parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(data_readme, destination / "data" / "external" / "README.md")
 
 

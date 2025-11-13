@@ -36,11 +36,31 @@ def main() -> None:
     type=click.Path(dir_okay=False, exists=False, path_type=pathlib.Path),
     help="Optional YAML configuration file to customize the template.",
 )
-def init_command(destination: pathlib.Path, template: str, config: Optional[pathlib.Path]) -> None:
+@click.option(
+    "--with-all-tools",
+    is_flag=True,
+    default=False,
+    help="Automatically install all available tools (core, data, runtime, mcp, reports, requirements, scripts) into the new lab.",
+)
+def init_command(
+    destination: pathlib.Path, template: str, config: Optional[pathlib.Path], with_all_tools: bool
+) -> None:
     """Initialise a new lab project in DESTINATION."""
+
+    from .scaffold import create_project, install_all_tools
 
     create_project(destination=destination, template_name=template, config_path=config)
     click.echo(f"Lab project created at {destination}")
+    
+    if with_all_tools:
+        click.echo("Installing all available tools...")
+        install_all_tools(destination)
+        click.echo("✓ All tools installed successfully")
+        click.echo("\nNext steps:")
+        click.echo(f"  1. cd {destination}")
+        click.echo("  2. source activate.sh dev  # or: lab, test, stage, client")
+        click.echo("  3. pip install -e .  # if you add a pyproject.toml")
+        click.echo("  4. Review and customize the installed tools as needed")
 
 
 @main.group()

@@ -20,22 +20,65 @@ Reusable infrastructure, automation, and documentation tooling distilled from pr
 
 ## Getting Started
 
+### Install labtools
+
 ```bash
+# Create and activate virtual environment
 python -m venv .venv
 source .venv/bin/activate
+
+# Or use the provided activation script (supports multiple environments)
+source activate.sh dev
+
+# Install labtools in editable mode
 pip install --upgrade pip
 pip install -e .
+
+# Verify installation
 labtools --help
-labtools infra --help
-labtools shell --help
-labtools docs --help
-labtools core --help
-labtools data --help
-labtools reports --help
-labtools mcp --help
-labtools runtime --help
-labtools requirements --help
 ```
+
+### Create a New Lab with All Tools
+
+**Important:** Make sure your virtual environment is activated first!
+
+```bash
+# Activate the environment (if not already active)
+source .venv/bin/activate
+# OR
+source activate.sh dev
+
+# Using the CLI
+labtools init ../my-new-lab --with-all-tools
+
+# Or using the wrapper script
+./scripts/build_lab.sh --name my-new-lab --destination ../my-new-lab --with-all-tools
+```
+
+This automatically installs:
+- Core modules (diagnostics, run_context, execution_enforcer, validation_runner, build_reporter)
+- Data modules (hash_utils, manifest, duckdb_config, environment_manager)
+- Runtime modules (job orchestration primitives)
+- MCP tools (model control plane utilities)
+- Report generators
+- Requirements files
+- Environment scripts (activate.sh, deactivate.sh, go.py, go.sh)
+- Documentation templates
+- Data directory structure
+
+### Manual Tool Installation
+
+If you prefer to install tools selectively, create a lab first, then use sync commands:
+
+```bash
+labtools init ../my-lab
+cd ../my-lab
+labtools core sync <source> <dest> --module <modules>
+labtools data sync <source> <dest> --module <modules>
+# ... etc
+```
+
+See `docs/usage/build-lab.md` for detailed instructions.
 
 ## Repository Layout
 

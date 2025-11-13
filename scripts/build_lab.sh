@@ -15,6 +15,7 @@ NAME=""
 TEMPLATE="default"
 DESTINATION=""
 CONFIG=""
+WITH_ALL_TOOLS=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -34,11 +35,18 @@ while [[ $# -gt 0 ]]; do
       CONFIG="$2"
       shift 2
       ;;
+    --with-all-tools)
+      WITH_ALL_TOOLS=true
+      shift
+      ;;
     --help|-h)
       cat <<EOF
-Usage: $0 [--name NAME] [--template TEMPLATE] --destination PATH [--config CONFIG]
+Usage: $0 [--name NAME] [--template TEMPLATE] --destination PATH [--config CONFIG] [--with-all-tools]
 
 Builds a new lab repository from the packaged templates.
+
+Options:
+  --with-all-tools    Automatically install all available tools (core, data, runtime, mcp, reports, requirements, scripts)
 EOF
       exit 0
       ;;
@@ -73,6 +81,10 @@ if [[ -n "$NAME" ]]; then
 name: "$NAME"
 EOF
   ARGS+=(--config "$TMP_CONFIG")
+fi
+
+if [[ "$WITH_ALL_TOOLS" == "true" ]]; then
+  ARGS+=(--with-all-tools)
 fi
 
 echo "=> Generating lab at $DESTINATION using template '$TEMPLATE'"
